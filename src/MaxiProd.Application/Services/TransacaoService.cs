@@ -44,36 +44,29 @@ public class TransacaoService : ITransacaoService
 
     public async Task<Result<TransacaoDto>> CriarAsync(CriarTransacaoRequest request, CancellationToken cancellationToken = default)
     {
-        // Validar descrição
         if (string.IsNullOrWhiteSpace(request.Descricao))
             return Result.Failure<TransacaoDto>(DomainErrors.Transacao.DescricaoVazia);
 
         if (request.Descricao.Length > 400)
             return Result.Failure<TransacaoDto>(DomainErrors.Transacao.DescricaoMuitoLonga);
 
-        // Validar valor
         if (request.Valor <= 0)
             return Result.Failure<TransacaoDto>(DomainErrors.Transacao.ValorInvalido);
 
-        // Validar tipo
         if (!Enum.IsDefined(typeof(TipoTransacao), request.Tipo))
             return Result.Failure<TransacaoDto>(DomainErrors.Transacao.TipoInvalido);
 
-        // Buscar pessoa
         var pessoa = await _pessoaRepository.ObterPorIdAsync(request.PessoaId, cancellationToken);
         if (pessoa is null)
             return Result.Failure<TransacaoDto>(DomainErrors.Pessoa.NaoEncontrada);
 
-        // Validar menor de idade - só pode ter despesas
         if (pessoa.EhMenorDeIdade() && request.Tipo == TipoTransacao.Receita)
             return Result.Failure<TransacaoDto>(DomainErrors.Transacao.MenorSomenteDespesa);
 
-        // Buscar categoria
         var categoria = await _categoriaRepository.ObterPorIdAsync(request.CategoriaId, cancellationToken);
         if (categoria is null)
             return Result.Failure<TransacaoDto>(DomainErrors.Categoria.NaoEncontrada);
 
-        // Validar compatibilidade categoria x tipo transação
         if (!categoria.AceitaTipoTransacao(request.Tipo))
             return Result.Failure<TransacaoDto>(DomainErrors.Transacao.CategoriaIncompativel);
 
