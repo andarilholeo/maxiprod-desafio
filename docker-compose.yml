@@ -1,0 +1,50 @@
+services:
+  maxiprod-db-dev:
+    image: postgres:15-alpine
+    container_name: maxiprod-db-dev
+    environment:
+      POSTGRES_DB: MaxiProdDb_Dev
+      POSTGRES_USER: maxiprod
+      POSTGRES_PASSWORD: maxiprod123
+    ports:
+      - "5432:5432"
+    volumes:
+      - maxiprod-db-dev-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - maxiprod-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U maxiprod -d MaxiProdDb_Dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: maxiprod-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@maxiprod.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - maxiprod-dev-network
+    restart: unless-stopped
+    depends_on:
+      - maxiprod-db-dev
+
+volumes:
+  maxiprod-db-dev-data:
+    driver: local
+  pgadmin-data:
+    driver: local
+
+networks:
+  maxiprod-dev-network:
+    driver: bridge
+
