@@ -23,13 +23,18 @@ Sistema de gestão de pessoas, categorias e transações financeiras.
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - [Node.js 20+](https://nodejs.org/)
 
-## Configuração do Banco de Dados
+## Execução com Docker (Recomendado)
 
-### 1. Iniciar os containers
+### 1. Iniciar todos os serviços
 
 ```bash
 docker-compose up -d
 ```
+
+Isso irá iniciar:
+- **PostgreSQL** na porta 5432
+- **API .NET** na porta 5000 (com migrations automáticas)
+- **pgAdmin** na porta 8080
 
 ### 2. Verificar se os containers estão rodando
 
@@ -67,23 +72,25 @@ Após fazer login no pgAdmin, clique com o botão direito em **Servers** > **Reg
 
 Marque a opção **Save password** e clique em **Save**.
 
-## Executando o Backend
+## Execução Local (Desenvolvimento)
 
-### 1. Aplicar as migrations
+### Backend
+
+#### 1. Subir apenas o banco de dados
 
 ```bash
-cd src/MaxiProd.API
-dotnet ef migrations add Initial --project ../MaxiProd.Infrastructure
-dotnet ef database update --project ../MaxiProd.Infrastructure
+docker-compose up -d maxiprod-db-dev
 ```
 
-### 2. Rodar a API
+#### 2. Rodar a API localmente
 
 ```bash
 dotnet run --project src/MaxiProd.API
 ```
 
 A API estará disponível em: **http://localhost:5000**
+
+As migrations são aplicadas automaticamente ao iniciar a aplicação.
 
 ## Executando o Frontend
 
@@ -135,10 +142,20 @@ docker-compose down
 # Parar e remover volumes (apaga dados)
 docker-compose down -v
 
+# Ver logs da API
+docker-compose logs -f maxiprod-api
+
 # Ver logs do banco
 docker-compose logs -f maxiprod-db-dev
 
-# Rebuild do projeto
+# Rebuild da API após alterações
+docker-compose up -d --build maxiprod-api
+
+# Rebuild do projeto .NET local
 dotnet build
+
+# Gerar nova migration (local)
+cd src/MaxiProd.API
+dotnet ef migrations add NomeDaMigration --project ../MaxiProd.Infrastructure
 ```
 

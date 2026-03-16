@@ -21,6 +21,23 @@ services:
       retries: 5
       start_period: 10s
 
+  maxiprod-api:
+    build:
+      context: .
+      dockerfile: src/MaxiProd.API/Dockerfile
+    container_name: maxiprod-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=maxiprod-db-dev;Port=5432;Database=MaxiProdDb_Dev;Username=maxiprod;Password=maxiprod123
+    ports:
+      - "5000:5000"
+    networks:
+      - maxiprod-dev-network
+    restart: unless-stopped
+    depends_on:
+      maxiprod-db-dev:
+        condition: service_healthy
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: maxiprod-pgadmin
