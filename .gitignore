@@ -1,0 +1,104 @@
+# ==========================
+# .NET
+# ==========================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+project.lock.json
+*.nuget.props
+*.nuget.targets
+
+# User-specific files
+*.rsuser
+*.userprefs
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# EF Core Migrations snapshots (optional - some prefer to commit these)
+# **/Migrations/*.Designer.cs
+
+# ==========================
+# Node.js / React / Next.js
+# ==========================
+node_modules/
+.next/
+out/
+.turbo/
+build/
+dist/
+
+# Next.js
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# npm/yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+# yarn.lock
+
+# ==========================
+# Environment files
+# ==========================
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+appsettings.Development.json
+appsettings.Local.json
+
+# ==========================
+# OS files
+# ==========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==========================
+# IDE / Editor
+# ==========================
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ==========================
+# Testing
+# ==========================
+coverage/
+*.lcov
+TestResults/
+
+# ==========================
+# Misc
+# ==========================
+*.tmp
+*.temp
+*.bak
+*.orig
+

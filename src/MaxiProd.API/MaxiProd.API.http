@@ -1,0 +1,6 @@
+@MaxiProd.API_HostAddress = http://localhost:5228
+
+GET {{MaxiProd.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
