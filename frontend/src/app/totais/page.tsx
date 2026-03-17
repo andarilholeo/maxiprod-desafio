@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TotaisGeral, TotaisCategorias } from "@/types";
 import { getTotaisPorPessoa, getTotaisPorCategoria } from "@/services/api";
+import ErrorAlert from "@/components/ErrorAlert";
 
 export default function TotaisPage() {
   const [totaisPessoa, setTotaisPessoa] = useState<TotaisGeral | null>(null);
@@ -35,7 +36,7 @@ export default function TotaisPage() {
   const getSaldoClass = (saldo: number) => saldo >= 0 ? "text-green-600" : "text-red-600";
 
   if (loading) return <div className="text-center">Carregando...</div>;
-  if (error) return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">{error}</div>;
+  if (error) return <ErrorAlert error={error} />;
 
   return (
     <div>
@@ -59,7 +60,7 @@ export default function TotaisPage() {
       </div>
 
       {activeTab === "pessoa" && totaisPessoa && (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-lg shadow-md overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -92,7 +93,7 @@ export default function TotaisPage() {
       )}
 
       {activeTab === "categoria" && totaisCategoria && (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-lg shadow-md overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
