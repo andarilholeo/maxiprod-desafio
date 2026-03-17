@@ -1,4 +1,4 @@
-# MaxiProd
+# Desafio
 
 Sistema de gestão de pessoas, categorias e transações financeiras.
 
