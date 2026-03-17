@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Transacao, CriarTransacaoRequest, TipoTransacao, Pessoa, Categoria, Finalidade } from "@/types";
 import { getTransacoes, criarTransacao, getPessoas, getCategorias } from "@/services/api";
+import ErrorAlert from "@/components/ErrorAlert";
+import SearchableSelect from "@/components/SearchableSelect";
 
 export default function TransacoesPage() {
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
@@ -11,6 +13,7 @@ export default function TransacoesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [valorInput, setValorInput] = useState("");
   const [formData, setFormData] = useState<CriarTransacaoRequest>({
     descricao: "", valor: 0, tipo: TipoTransacao.Despesa, categoriaId: "", pessoaId: ""
   });
@@ -37,8 +40,10 @@ export default function TransacoesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await criarTransacao(formData);
+      const valorNumerico = parseFloat(valorInput.replace(",", ".")) || 0;
+      await criarTransacao({ ...formData, valor: valorNumerico });
       setShowForm(false);
+      setValorInput("");
       setFormData({ descricao: "", valor: 0, tipo: TipoTransacao.Despesa, categoriaId: "", pessoaId: "" });
       loadData();
     } catch (err) {
@@ -71,7 +76,7 @@ export default function TransacoesPage() {
         </button>
       </div>
 
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+      {error && <ErrorAlert error={error} />}
 
       {showForm && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -100,18 +105,31 @@ export default function TransacoesPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Categoria</label>
-                <select value={formData.categoriaId}
-                  onChange={(e) => setFormData({ ...formData, categoriaId: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
-                  <option value="">Selecione...</option>
-                  {getCategoriasDisponiveis().map(c => <option key={c.id} value={c.id}>{c.descricao}</option>)}
-                </select>
+                <SearchableSelect
+                  options={getCategoriasDisponiveis().map(c => ({ value: c.id, label: c.descricao }))}
+                  value={formData.categoriaId}
+                  onChange={(value) => setFormData({ ...formData, categoriaId: value })}
+                  placeholder="Selecione..."
+                  required
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Valor</label>
-                <input type="number" step="0.01" value={formData.valor}
-                  onChange={(e) => setFormData({ ...formData, valor: parseFloat(e.target.value) || 0 })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" min="0.01" required />
+                <div className="mt-1 relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">R$</span>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={valorInput}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9.,]/g, "");
+                      setValorInput(value);
+                    }}
+                    placeholder="0,00"
+                    className="block w-full rounded-md border-gray-300 shadow-sm p-2 pl-10 border"
+                    required
+                  />
+                </div>
               </div>
             </div>
             <div>
@@ -129,7 +147,7 @@ export default function TransacoesPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>

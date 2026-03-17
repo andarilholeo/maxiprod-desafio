@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Pessoa, CriarPessoaRequest } from "@/types";
 import { getPessoas, criarPessoa, atualizarPessoa, deletarPessoa } from "@/services/api";
+import ErrorAlert from "@/components/ErrorAlert";
+import { EditIcon, DeleteIcon } from "@/components/Icons";
 
 export default function PessoasPage() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
@@ -72,7 +74,7 @@ export default function PessoasPage() {
         </button>
       </div>
 
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+      {error && <ErrorAlert error={error} />}
 
       {showForm && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -99,13 +101,13 @@ export default function PessoasPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Idade</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ações</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -113,9 +115,20 @@ export default function PessoasPage() {
               <tr key={pessoa.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{pessoa.nome}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{pessoa.idade} anos</td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button onClick={() => handleEdit(pessoa)} className="text-blue-600 hover:text-blue-900 mr-4">Editar</button>
-                  <button onClick={() => handleDelete(pessoa.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  <div className="inline-flex items-center">
+                    <button onClick={() => handleEdit(pessoa)}
+                      className="text-blue-600 hover:text-blue-900 p-1 hover:bg-blue-50 rounded"
+                      title="Editar">
+                      <EditIcon />
+                    </button>
+                    <span className="mx-1 h-5 w-px bg-gray-200"></span>
+                    <button onClick={() => handleDelete(pessoa.id)}
+                      className="text-red-600 hover:text-red-900 p-1 hover:bg-red-50 rounded"
+                      title="Excluir">
+                      <DeleteIcon />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

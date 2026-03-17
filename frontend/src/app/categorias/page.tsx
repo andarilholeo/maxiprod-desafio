@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Categoria, CriarCategoriaRequest, Finalidade } from "@/types";
 import { getCategorias, criarCategoria } from "@/services/api";
+import ErrorAlert from "@/components/ErrorAlert";
 
 export default function CategoriasPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -67,7 +68,7 @@ export default function CategoriasPage() {
         </button>
       </div>
 
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+      {error && <ErrorAlert error={error} />}
 
       {showForm && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -99,7 +100,7 @@ export default function CategoriasPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>

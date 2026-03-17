@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using MaxiProd.API.Middleware;
 using MaxiProd.Application;
 using MaxiProd.Infrastructure;
 using MaxiProd.Infrastructure.Data;
@@ -54,6 +55,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseExceptionMiddleware();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.MapControllers();
