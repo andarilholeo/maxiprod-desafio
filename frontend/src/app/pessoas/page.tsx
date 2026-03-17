@@ -13,6 +13,11 @@ export default function PessoasPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingPessoa, setEditingPessoa] = useState<Pessoa | null>(null);
   const [formData, setFormData] = useState<CriarPessoaRequest>({ nome: "", idade: 0 });
+  const [searchFilter, setSearchFilter] = useState("");
+
+  const filteredPessoas = pessoas.filter((pessoa) =>
+    pessoa.nome.toLowerCase().includes(searchFilter.toLowerCase())
+  );
 
   const loadPessoas = async () => {
     try {
@@ -74,6 +79,16 @@ export default function PessoasPage() {
         </button>
       </div>
 
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Buscar por nome..."
+          value={searchFilter}
+          onChange={(e) => setSearchFilter(e.target.value)}
+          className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+
       {error && <ErrorAlert error={error} />}
 
       {showForm && (
@@ -111,7 +126,7 @@ export default function PessoasPage() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {pessoas.map((pessoa) => (
+            {filteredPessoas.map((pessoa) => (
               <tr key={pessoa.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{pessoa.nome}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{pessoa.idade} anos</td>
@@ -132,8 +147,10 @@ export default function PessoasPage() {
                 </td>
               </tr>
             ))}
-            {pessoas.length === 0 && (
-              <tr><td colSpan={3} className="px-6 py-4 text-center text-gray-500">Nenhuma pessoa cadastrada</td></tr>
+            {filteredPessoas.length === 0 && (
+              <tr><td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                {searchFilter ? "Nenhuma pessoa encontrada" : "Nenhuma pessoa cadastrada"}
+              </td></tr>
             )}
           </tbody>
         </table>

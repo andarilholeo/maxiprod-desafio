@@ -1,48 +1,48 @@
 services:
-  maxiprod-db-dev:
+  desafio-tecnico-db-dev:
     image: postgres:15-alpine
-    container_name: maxiprod-db-dev
+    container_name: desafio-tecnico-db-dev
     environment:
-      POSTGRES_DB: MaxiProdDb_Dev
-      POSTGRES_USER: maxiprod
-      POSTGRES_PASSWORD: maxiprod123
+      POSTGRES_DB: DesafioTecnicoDb_Dev
+      POSTGRES_USER: desafiotecnico
+      POSTGRES_PASSWORD: desafiotecnico123
     ports:
       - "5432:5432"
     volumes:
-      - maxiprod-db-dev-data:/var/lib/postgresql/data
+      - desafio-tecnico-db-dev-data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - maxiprod-dev-network
+      - desafio-tecnico-dev-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U maxiprod -d MaxiProdDb_Dev"]
+      test: ["CMD-SHELL", "pg_isready -U desafiotecnico -d DesafioTecnicoDb_Dev"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
 
-  maxiprod-api:
+  desafio-tecnico-api:
     build:
       context: .
-      dockerfile: src/MaxiProd.API/Dockerfile
-    container_name: maxiprod-api
+      dockerfile: src/DesafioTecnico.API/Dockerfile
+    container_name: desafio-tecnico-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=maxiprod-db-dev;Port=5432;Database=MaxiProdDb_Dev;Username=maxiprod;Password=maxiprod123
+      ConnectionStrings__DefaultConnection: Host=desafio-tecnico-db-dev;Port=5432;Database=DesafioTecnicoDb_Dev;Username=desafiotecnico;Password=desafiotecnico123
     ports:
       - "5228:5000"
     networks:
-      - maxiprod-dev-network
+      - desafio-tecnico-dev-network
     restart: unless-stopped
     depends_on:
-      maxiprod-db-dev:
+      desafio-tecnico-db-dev:
         condition: service_healthy
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: maxiprod-pgadmin
+    container_name: desafio-tecnico-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@maxiprod.com
+      PGADMIN_DEFAULT_EMAIL: admin@desafiotecnico.com
       PGADMIN_DEFAULT_PASSWORD: admin123
       PGADMIN_CONFIG_SERVER_MODE: "False"
     ports:
@@ -50,18 +50,18 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     networks:
-      - maxiprod-dev-network
+      - desafio-tecnico-dev-network
     restart: unless-stopped
     depends_on:
-      - maxiprod-db-dev
+      - desafio-tecnico-db-dev
 
 volumes:
-  maxiprod-db-dev-data:
+  desafio-tecnico-db-dev-data:
     driver: local
   pgadmin-data:
     driver: local
 
 networks:
-  maxiprod-dev-network:
+  desafio-tecnico-dev-network:
     driver: bridge
 

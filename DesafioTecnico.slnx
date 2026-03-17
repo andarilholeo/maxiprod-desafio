@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DesafioTecnico.API/DesafioTecnico.API.csproj" />
+    <Project Path="src/DesafioTecnico.Application/DesafioTecnico.Application.csproj" />
+    <Project Path="src/DesafioTecnico.Domain/DesafioTecnico.Domain.csproj" />
+    <Project Path="src/DesafioTecnico.Infrastructure/DesafioTecnico.Infrastructure.csproj" />
+  </Folder>
+</Solution>

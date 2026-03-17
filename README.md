@@ -1,4 +1,4 @@
-# Desafio
+# MaxiProd
 
 Sistema de gestão de pessoas, categorias e transações financeiras.
 
@@ -79,13 +79,13 @@ Marque a opção **Save password** e clique em **Save**.
 #### 1. Subir apenas o banco de dados
 
 ```bash
-docker-compose up -d maxiprod-db-dev
+docker-compose up -d desafio-tecnico-db-dev
 ```
 
 #### 2. Rodar a API localmente
 
 ```bash
-dotnet run --project src/MaxiProd.API
+dotnet run --project src/DesafioTecnico.API
 ```
 
 A API estará disponível em: **http://localhost:5000**
@@ -112,17 +112,17 @@ O frontend estará disponível em: **http://localhost:3000**
 ## Estrutura do Projeto
 
 ```
-maxiprod/
+desafio-tecnico/
 ├── src/
-│   ├── MaxiProd.Domain/        # Entidades, Enums, Interfaces
-│   ├── MaxiProd.Infrastructure/ # DbContext, Repositórios, EF Core
-│   ├── MaxiProd.Application/   # Services, DTOs, Regras de negócio
-│   └── MaxiProd.API/           # Controllers, Program.cs
+│   ├── DesafioTecnico.Domain/         # Entidades, Enums, Interfaces
+│   ├── DesafioTecnico.Infrastructure/ # DbContext, Repositórios, EF Core
+│   ├── DesafioTecnico.Application/    # Services, DTOs, Regras de negócio
+│   └── DesafioTecnico.API/            # Controllers, Program.cs
 ├── frontend/
 │   └── src/
-│       ├── app/                # Páginas (Next.js App Router)
-│       ├── services/           # Chamadas à API
-│       └── types/              # Tipos TypeScript
+│       ├── app/                       # Páginas (Next.js App Router)
+│       ├── services/                  # Chamadas à API
+│       └── types/                     # Tipos TypeScript
 ├── docker-compose.yml
 └── init-db.sql
 ```
@@ -143,19 +143,19 @@ docker-compose down
 docker-compose down -v
 
 # Ver logs da API
-docker-compose logs -f maxiprod-api
+docker-compose logs -f desafio-tecnico-api
 
 # Ver logs do banco
-docker-compose logs -f maxiprod-db-dev
+docker-compose logs -f desafio-tecnico-db-dev
 
 # Rebuild da API após alterações
-docker-compose up -d --build maxiprod-api
+docker-compose up -d --build desafio-tecnico-api
 
 # Rebuild do projeto .NET local
 dotnet build
 
 # Gerar nova migration (local)
-cd src/MaxiProd.API
-dotnet ef migrations add NomeDaMigration --project ../MaxiProd.Infrastructure
+cd src/DesafioTecnico.API
+dotnet ef migrations add NomeDaMigration --project ../DesafioTecnico.Infrastructure
 ```
 
