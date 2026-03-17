@@ -30,7 +30,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: Host=maxiprod-db-dev;Port=5432;Database=MaxiProdDb_Dev;Username=maxiprod;Password=maxiprod123
     ports:
-      - "5000:5000"
+      - "5228:5000"
     networks:
       - maxiprod-dev-network
     restart: unless-stopped
